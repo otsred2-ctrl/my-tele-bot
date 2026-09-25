@@ -100,4 +100,17 @@ def get_buttons_and_send(message):
     bot.send_message(message.chat.id, f"📢 تم نشر المنشور والزر الشفاف بنجاح في {success_count} قناة من أصل {len(channels)}.")
     del USER_STATE[message.from_user.id] # تفريغ الذاكرة
 
-bot.infinity_polling()
+import os
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "البوت يعمل بنجاح!"
+
+if __name__ == "__main__":
+    import threading
+    threading.Thread(target=bot.infinity_polling, daemon=True).start()
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
